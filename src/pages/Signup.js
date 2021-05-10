@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { signupUser } from '../redux/actions/userActions';
 
 import useTheme from '@material-ui/core/styles/useTheme';
 import TextField from '@material-ui/core/TextField';
@@ -11,44 +12,37 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-const Singup = (props) => {
+const Signup = (props) => {
+	const dispatch = useDispatch();
+	const { loading, errors } = useSelector((state) => state.UI);
+
 	const [state, setState] = useState({
 		email: '',
 		password: '',
 		confirmPassword: '',
 		handle: '',
-		loading: false,
 		error: {},
 	});
+	useEffect(() => {
+		if (errors) {
+			setState((prev) => {
+				return { ...prev, error: errors };
+			});
+		}
+	}, [errors]);
 	const handleChange = (e) => {
 		setState({ ...state, [e.target.name]: e.target.value });
 	};
 
-	console.log(state);
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		setState({ ...state, loading: true });
 		const newUserData = {
 			email: state.email,
 			password: state.password,
 			confirmPassword: state.confirmPassword,
 			handle: state.handle,
 		};
-		axios
-			.post('/login', newUserData)
-			.then((res) => {
-				console.log(res.data);
-				setState({ ...state, loading: false });
-				props.history.push('/');
-			})
-			.catch((err) => {
-				console.log(err.response);
-				setState({
-					...state,
-					error: err.response.data,
-					loading: false,
-				});
-			});
+		dispatch(signupUser(newUserData, props.history));
 	};
 	const styles = useTheme();
 	return (
@@ -58,7 +52,7 @@ const Singup = (props) => {
 				<Grid item sm>
 					<img src={AppLogo} alt='logo' style={styles.image} />
 					<Typography variant='h2' style={styles.pageTitle}>
-						Login
+						Signup
 					</Typography>
 					<form noValidate onSubmit={handleSubmit}>
 						<TextField
@@ -85,6 +79,30 @@ const Singup = (props) => {
 							onChange={handleChange}
 							fullWidth
 						/>
+						<TextField
+							id='confirmPassword'
+							name='confirmPassword'
+							type='password'
+							label='Confirm Password'
+							helperText={state.error.confirmPassword}
+							error={state.error.confirmPassword ? true : false}
+							value={state.confirmPassword}
+							style={styles.textField}
+							onChange={handleChange}
+							fullWidth
+						/>
+						<TextField
+							id='handle'
+							name='handle'
+							type='text'
+							label='Handle'
+							helperText={state.error.handle}
+							error={state.error.handle ? true : false}
+							value={state.handle}
+							style={styles.textField}
+							onChange={handleChange}
+							fullWidth
+						/>
 						{state.error.general && (
 							<Typography
 								variant='body2'
@@ -97,11 +115,11 @@ const Singup = (props) => {
 							type='submit'
 							variant='contained'
 							color='primary'
-							disabled={state.loading}
+							disabled={loading}
 							style={styles.button}
 						>
-							Login
-							{state.loading && (
+							Signup
+							{loading && (
 								<CircularProgress
 									size={20}
 									style={styles.progress}
@@ -110,8 +128,8 @@ const Singup = (props) => {
 						</Button>
 						<br />
 						<small>
-							Don't have an account? Sign up
-							<Link to='/signup'>here</Link>
+							Already have an account? Login{' '}
+							<Link to='/login'>here</Link>
 						</small>
 					</form>
 				</Grid>
@@ -121,4 +139,7 @@ const Singup = (props) => {
 	);
 };
 
-export default Singup;
+// Login.propTypes = {
+// 	classes: propTypes.object.isRequired,
+// };
+export default Signup;

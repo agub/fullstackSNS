@@ -1,55 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import AppLogo from '../images/icon.png';
+// import propTypes from 'prop-types';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../redux/actions/userActions';
+
 import useTheme from '@material-ui/core/styles/useTheme';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
-
-import AppLogo from '../images/icon.png';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 const Login = (props) => {
+	const dispatch = useDispatch();
+	const { loading, errors } = useSelector((state) => state.UI);
+
 	const [state, setState] = useState({
 		email: '',
 		password: '',
-		loading: false,
 		error: {},
 	});
+
+	useEffect(() => {
+		if (errors) {
+			setState((prev) => {
+				return { ...prev, error: errors };
+			});
+		}
+	}, [errors]);
+
 	const handleChange = (e) => {
-		setState({ ...state, [e.target.name]: e.target.value });
+		// setState({ ...state, [e.target.name]: e.target.value });
+		setState((prev) => {
+			return { ...prev, [e.target.name]: e.target.value };
+		});
 	};
 
-	console.log(state);
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		setState({ ...state, loading: true });
+
 		const userData = {
 			email: state.email,
 			password: state.password,
 		};
-		axios
-			.post('/login', userData)
-			.then((res) => {
-				console.log(res.data);
-				setState({ ...state, loading: false });
-				props.history.push('/');
-			})
-			.catch((err) => {
-				console.log(err.response);
-				setState({
-					...state,
-					error: err.response.data,
-					loading: false,
-				});
-			});
+		dispatch(loginUser(userData, props.history));
+		// props.loginUser(userData, props.history);
 	};
 	const styles = useTheme();
-	// console.log(classes.form);
-	// console.log(classes.root);
-	// const classes = useStyles(props);
-	// console.log(classes);
+
 	return (
 		<div style={styles.root}>
 			<Grid container style={styles.form}>
@@ -96,11 +96,11 @@ const Login = (props) => {
 							type='submit'
 							variant='contained'
 							color='primary'
-							disabled={state.loading}
+							disabled={loading}
 							style={styles.button}
 						>
 							Login
-							{state.loading && (
+							{loading && (
 								<CircularProgress
 									size={20}
 									style={styles.progress}
@@ -109,7 +109,7 @@ const Login = (props) => {
 						</Button>
 						<br />
 						<small>
-							Don't have an account? Sign up
+							Don't have an account? Sign up{' '}
 							<Link to='/signup'>here</Link>
 						</small>
 					</form>
@@ -119,5 +119,9 @@ const Login = (props) => {
 		</div>
 	);
 };
+
+// Login.propTypes = {
+// 	styles: propTypes.object.isRequired,
+// };
 
 export default Login;
