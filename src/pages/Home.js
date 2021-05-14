@@ -1,24 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
 
+import Profile from '../components/Profile';
 import Scream from '../components/Scream';
 import Grid from '@material-ui/core/Grid';
+import { getScream } from '../redux/actions/dataActions';
 
 function Home() {
-	const [screams, setScreams] = useState(null);
+	const dispatch = useDispatch();
 	useEffect(() => {
-		axios
-			.get('/screams')
-			.then((res) => {
-				console.log(res.data);
-				setScreams(res.data);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
+		dispatch(getScream());
 	}, []);
 
-	let recentScreamMarkup = screams ? (
+	const { loading, screams } = useSelector((state) => state.data);
+
+	// const [screams, setScreams] = useState(null);
+
+	let recentScreamMarkup = !loading ? (
 		screams.map((scream) => (
 			<Scream key={scream.screamId} scream={scream} />
 		))
@@ -32,30 +30,10 @@ function Home() {
 				{recentScreamMarkup}
 			</Grid>
 			<Grid item sm={4} xs={12}>
-				<p>profile...</p>
+				<Profile />
 			</Grid>
 		</Grid>
 	);
 }
-// Scream.propTypes = {
-// 	body: PropTypes.string,
-// 	createdAt: PropTypes.string,
-// 	userImage: PropTypes.string,
-// 	userHandle: PropTypes.string,
-// 	screamId: PropTypes.string,
-// 	LikeCount: PropTypes.number,
-// 	CommentCount: PropTypes.number,
-// };
 
-// Scream.propTypes = {
-// 	scream: PropTypes.shape({
-// 		body: PropTypes.string,
-// 		createdAt: PropTypes.string,
-// 		userImage: PropTypes.string,
-// 		userHandle: PropTypes.string,
-// 		screamId: PropTypes.string,
-// 		LikeCount: PropTypes.number,
-// 		CommentCount: PropTypes.number,
-// 	}).isRequired,
-// };
 export default Home;
