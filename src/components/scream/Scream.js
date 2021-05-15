@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { likeScream, unlikeScream } from '../redux/actions/dataActions';
+// import { likeScream, unlikeScream } from '../redux/actions/dataActions';
 import DeleteScream from './DeleteScream';
+import ScreamDialog from './ScreamDialog';
 
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
@@ -14,9 +15,9 @@ import Typography from '@material-ui/core/Typography';
 
 import ChatIcon from '@material-ui/icons/Chat';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import MyButton from '../utils/MyButton';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import MyButton from '../../utils/MyButton';
+import LikeButton from './LikeButton';
+
 const useStyles = makeStyles({
 	card: {
 		display: 'flex',
@@ -27,7 +28,7 @@ const useStyles = makeStyles({
 });
 const Scream = (props) => {
 	const classes = useStyles();
-	const dispatch = useDispatch();
+	// const dispatch = useDispatch();
 	const {
 		body,
 		createdAt,
@@ -37,41 +38,11 @@ const Scream = (props) => {
 		likeCount,
 		commentCount,
 	} = props.scream;
-	const { likes, authenticated, credentials } = useSelector(
-		(state) => state.user
-	);
-	console.log(screamId);
-	const likedScream = () => {
-		if (likes && likes.find((like) => like.screamId === screamId)) {
-			return true;
-		} else return false;
-	};
-	// console.log(likedScream());
-	const likeScreamHandle = () => {
-		dispatch(likeScream(screamId));
-	};
-	const unlikeScreamHandle = () => {
-		dispatch(unlikeScream(screamId));
-	};
+	const { authenticated, credentials } = useSelector((state) => state.user);
 	const deleteButton =
 		authenticated && userHandle === credentials.handle ? (
 			<DeleteScream screamId={screamId} />
 		) : null;
-	const likeButton = !authenticated ? (
-		<MyButton tip='like'>
-			<Link to='/login'>
-				<FavoriteBorderIcon color='primary' />
-			</Link>
-		</MyButton>
-	) : likedScream() ? (
-		<MyButton tip='undo like' onClick={unlikeScreamHandle}>
-			<FavoriteIcon color='primary' />
-		</MyButton>
-	) : (
-		<MyButton tip='like' onClick={likeScreamHandle}>
-			<FavoriteBorderIcon color='primary' />
-		</MyButton>
-	);
 
 	dayjs.extend(relativeTime);
 
@@ -96,12 +67,13 @@ const Scream = (props) => {
 					{dayjs(createdAt).fromNow()}
 				</Typography>
 				<Typography variant='body1'>{body}</Typography>
-				{likeButton}
+				<LikeButton screamId={screamId} />
 				<span>{likeCount} likes</span>
 				<MyButton tip='comments'>
 					<ChatIcon color='primary' />
 				</MyButton>
 				<span>{commentCount} comments</span>
+				<ScreamDialog screamId={screamId} userHandle={userHandle} />
 			</CardContent>
 		</Card>
 	);

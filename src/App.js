@@ -18,7 +18,7 @@ import { unstable_createMuiStrictModeTheme as createMuiTheme } from '@material-u
 import home from './pages/Home';
 import login from './pages/Login';
 import signup from './pages/Signup';
-import Navbar from './components/Navbar';
+import Navbar from './components/layout/Navbar';
 
 // const theme = CreateMuiTheme(themeFile);
 const theme = createMuiTheme(themeFile);

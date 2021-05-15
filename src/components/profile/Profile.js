@@ -1,10 +1,10 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { logoutUser, uploadImage } from '../redux/actions/userActions';
+import { logoutUser, uploadImage } from '../../redux/actions/userActions';
 import dayjs from 'dayjs';
 import EditDetails from './EditDetails.js';
-import MyButton from '../utils/MyButton';
+import MyButton from '../../utils/MyButton';
 
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';

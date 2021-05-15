@@ -4,6 +4,8 @@ import {
 	LIKE_SCREAM,
 	UNLIKE_SCREAM,
 	DELETE_SCREAM,
+	POST_SCREAM,
+	SET_SCREAM,
 } from '../types';
 
 const initialState = {
@@ -18,6 +20,8 @@ export const dataReducer = (state = initialState, action) => {
 			return { ...state, loading: true };
 		case SET_SCREAMS:
 			return { ...state, loading: false, screams: action.payload };
+		case SET_SCREAM:
+			return { ...state, scream: action.payload };
 		case LIKE_SCREAM:
 		case UNLIKE_SCREAM:
 			let index = state.screams.findIndex(
@@ -37,6 +41,11 @@ export const dataReducer = (state = initialState, action) => {
 			state.screams.splice(number, 1);
 			return {
 				...state,
+			};
+		case POST_SCREAM:
+			return {
+				...state,
+				screams: [action.payload, ...state.screams],
 			};
 		default:
 			return state;

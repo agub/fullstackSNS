@@ -61,6 +61,9 @@ export default {
 	paper: {
 		padding: 20,
 	},
+	spinnerDiv: {
+		textAlign: 'center',
+	},
 	profile: {
 		imageWrapper: {
 			textAlign: 'center',
