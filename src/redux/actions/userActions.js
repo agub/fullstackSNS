@@ -80,7 +80,7 @@ export const editUserDetails = (userDetails) => (dispatch) => {
 		.catch((err) => console.log(err));
 };
 
-export const markNotificaitonRead = (notificationId) => (dispatch) => {
+export const markNotificaitonsRead = (notificationId) => (dispatch) => {
 	axios
 		.post('/notifications', notificationId)
 		.then((res) => {
