@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import MyButton from '../../utils/MyButton';
+import Comments from './Comments';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import CommentForm from './CommentForm';
 import dayjs from 'dayjs';
 import Dialog from '@material-ui/core/Dialog';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -11,22 +13,51 @@ import useTheme from '@material-ui/core/styles/useTheme';
 import Grid from '@material-ui/core/Grid';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
-import { getScream } from '../../redux/actions/dataActions';
+import { clearErrors, getScream } from '../../redux/actions/dataActions';
 import UnfoldMoreIcon from '@material-ui/icons/UnfoldMore';
 import ChatIcon from '@material-ui/icons/Chat';
 
 const ScreamDialog = (props) => {
-	const styles = useTheme();
-	const dispatch = useDispatch();
 	const { scream } = useSelector((state) => state.data);
 	const { loading } = useSelector((state) => state.UI);
-	const [open, setOpen] = useState(false);
+	const styles = useTheme();
+	const dispatch = useDispatch();
+	useEffect(() => {
+		if (props.openDialog) {
+			handleOpen();
+		}
+	}, []);
+	const [state, setState] = useState({
+		open: false,
+		oldPath: '',
+		newPath: '',
+	});
 	const handleOpen = () => {
-		setOpen(true);
+		let oldPath = window.location.pathname;
+		const newPath = `/users/${props.userHandle}/scream/${props.screamId}`;
+		if (oldPath === newPath) {
+			oldPath = `/users/${props.userHandle}`;
+		}
+		window.history.pushState(null, null, newPath);
+		setState((prev) => {
+			return {
+				...prev,
+				open: true,
+				oldPath,
+				newPath,
+			};
+		});
 		dispatch(getScream(props.screamId));
 	};
 	const handleClose = () => {
-		setOpen(false);
+		window.history.pushState(null, null, state.oldPath);
+		setState((prev) => {
+			return {
+				...prev,
+				open: false,
+			};
+		});
+		dispatch(clearErrors());
 	};
 	const dialogMarkup = loading ? (
 		<div style={styles.spinnerDiv}>
@@ -72,8 +103,8 @@ const ScreamDialog = (props) => {
 				<span>{scream.commentCount} comments</span>
 			</Grid>
 			<hr style={styles.visibleSeparator} />
-			{/* <CommentForm screamId={scream.screamId} /> */}
-			{/* <Comments comments={scream.comments} /> */}
+			<CommentForm screamId={scream.screamId} />
+			{scream.comments && <Comments comments={scream.comments} />}
 		</Grid>
 	);
 	return (
@@ -82,7 +113,12 @@ const ScreamDialog = (props) => {
 				<UnfoldMoreIcon color='primary' />
 			</MyButton>
 
-			<Dialog open={open} onClose={handleClose} fullWidth maxWidth='sm'>
+			<Dialog
+				open={state.open}
+				onClose={handleClose}
+				fullWidth
+				maxWidth='sm'
+			>
 				<DialogContent style={styles.dialogContent}>
 					{dialogMarkup}
 				</DialogContent>

@@ -73,7 +73,7 @@ function Profile() {
 					<div style={styles.profile.profileDetails}>
 						<MuiLink
 							component={Link}
-							to={`/user/${credentials.handle}`}
+							to={`/users/${credentials.handle}`}
 							color='primary'
 							variant='h5'
 						>

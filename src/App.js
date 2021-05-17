@@ -19,6 +19,7 @@ import home from './pages/Home';
 import login from './pages/Login';
 import signup from './pages/Signup';
 import Navbar from './components/layout/Navbar';
+import User from './pages/User';
 
 // const theme = CreateMuiTheme(themeFile);
 const theme = createMuiTheme(themeFile);
@@ -53,6 +54,16 @@ function App() {
 								component={signup}
 							/>
 							<AuthRoute exact path='/login' component={login} />
+							<Route
+								exact
+								path='/users/:handle'
+								component={User}
+							/>
+							<Route
+								exact
+								path='/users/:handle/scream/:screamId'
+								component={User}
+							/>
 						</Switch>
 					</div>
 				</Router>

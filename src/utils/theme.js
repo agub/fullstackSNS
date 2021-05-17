@@ -64,6 +64,17 @@ export default {
 	spinnerDiv: {
 		textAlign: 'center',
 	},
+	commentImage: {
+		maxWidth: '100%',
+		margin: 'auto',
+		// width: '20px',
+		// height: 100,
+		borderRadius: '50%',
+		objectFit: 'cover',
+	},
+	commentData: {
+		marginLeft: 20,
+	},
 	profile: {
 		imageWrapper: {
 			textAlign: 'center',

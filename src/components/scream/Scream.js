@@ -57,7 +57,7 @@ const Scream = (props) => {
 				<Typography
 					variant='h5'
 					component={Link}
-					to={`/user/${userHandle}`}
+					to={`/users/${userHandle}`}
 					color='primary'
 				>
 					{userHandle}
@@ -73,7 +73,11 @@ const Scream = (props) => {
 					<ChatIcon color='primary' />
 				</MyButton>
 				<span>{commentCount} comments</span>
-				<ScreamDialog screamId={screamId} userHandle={userHandle} />
+				<ScreamDialog
+					screamId={screamId}
+					userHandle={userHandle}
+					openDialog={props.openDialog}
+				/>
 			</CardContent>
 		</Card>
 	);

@@ -3,13 +3,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import MyButton from '../../utils/MyButton';
-
+import Notifications from './Notifications';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 import HomeIcon from '@material-ui/icons/Home';
-import NotificationsIcon from '@material-ui/icons/Notifications';
+
 import PostScream from '../scream/PostScream';
 
 function NavBar() {
@@ -19,16 +19,15 @@ function NavBar() {
 			<Toolbar className='nav-container'>
 				{authenticated ? (
 					<>
-						{/* <MyButton tip='Post a scream'>
-							<AddIcon />
-						</MyButton> */}
 						<PostScream />
-						<MyButton tip='Home'>
-							<HomeIcon />
-						</MyButton>
-						<MyButton tip='Notification'>
-							<NotificationsIcon />
-						</MyButton>
+						<Link to='/'>
+							<MyButton tip='Home'>
+								<HomeIcon />
+							</MyButton>
+						</Link>
+						{/* <MyButton tip='Notification'> */}
+						<Notifications />
+						{/* </MyButton> */}
 					</>
 				) : (
 					<>
