@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
-import { useDispatch, useSelector } from 'react-redux';
+
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
@@ -9,7 +9,6 @@ import useTheme from '@material-ui/core/styles/useTheme';
 
 const Comments = (props) => {
 	const styles = useTheme();
-	// const { screams } = useSelector((state) => state.data);
 	return (
 		<Grid container>
 			{props.comments.map((comment, index) => {

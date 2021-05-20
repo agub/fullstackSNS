@@ -8,9 +8,7 @@ import { likeScream, unlikeScream } from '../../redux/actions/dataActions';
 
 const LikeButton = (props) => {
 	const dispatch = useDispatch();
-	const { likes, authenticated, credentials } = useSelector(
-		(state) => state.user
-	);
+	const { likes, authenticated } = useSelector((state) => state.user);
 	const likedScream = () => {
 		if (likes && likes.find((like) => like.screamId === props.screamId)) {
 			return true;

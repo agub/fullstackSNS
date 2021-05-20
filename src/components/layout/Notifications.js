@@ -1,20 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-// import { likeScream, unlikeScream } from '../redux/actions/dataActions';
-// import DeleteScream from './DeleteScream';
-// import ScreamDialog from './ScreamDialog';
 import { markNotificaitonsRead } from '../../redux/actions/userActions';
 import Badge from '@material-ui/core/Badge';
-
 import dayjs from 'dayjs';
-
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-
+import relativeTime from 'dayjs/plugin/relativeTime';
 // Icons
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import FavoriteIcon from '@material-ui/icons/Favorite';
@@ -22,6 +17,7 @@ import ChatIcon from '@material-ui/icons/Chat';
 
 const Notifications = () => {
 	const dispatch = useDispatch();
+	dayjs.extend(relativeTime);
 	const [anchorEl, setAnchorEl] = React.useState(null);
 	const { notifications } = useSelector((state) => state.user);
 
@@ -41,8 +37,6 @@ const Notifications = () => {
 	};
 	let notificationsIcon;
 	const NotificationFunction = () => {
-		console.log();
-
 		if (notifications && notifications.length > 0) {
 			notifications.filter((notification) => notification.read === false)
 				.length > 0
@@ -67,37 +61,39 @@ const Notifications = () => {
 	NotificationFunction();
 	let notificationsMarkup =
 		notifications && notifications.length > 0 ? (
-			notifications.map((not) => {
-				const verb = not.type === 'like' ? 'liked' : 'commented on';
-				const time = dayjs(not.createdAt).fromNow();
-				const iconColor = not.read ? 'primary' : 'secondary';
-				const icon =
-					not.type === 'like' ? (
-						<FavoriteIcon
-							color={iconColor}
-							style={{ marginRight: 10 }}
-						/>
-					) : (
-						<ChatIcon
-							color={iconColor}
-							style={{ marginRight: 10 }}
-						/>
-					);
+			notifications
+				.filter((item, idx) => idx < 2)
+				.map((not) => {
+					const verb = not.type === 'like' ? 'liked' : 'commented on';
+					const time = dayjs(not.createdAt).fromNow();
+					const iconColor = not.read ? 'primary' : 'secondary';
+					const icon =
+						not.type === 'like' ? (
+							<FavoriteIcon
+								color={iconColor}
+								style={{ marginRight: 10 }}
+							/>
+						) : (
+							<ChatIcon
+								color={iconColor}
+								style={{ marginRight: 10 }}
+							/>
+						);
 
-				return (
-					<MenuItem key={not.createdAt} onClick={handleClose}>
-						<Link
-							to={`/users/${not.recipient}/scream/${not.screamId}`}
-							style={{ display: 'flex' }}
-						>
-							{icon}
-							<Typography variatnt='body1'>
-								{not.sender} {verb} your scream {time}
-							</Typography>
-						</Link>
-					</MenuItem>
-				);
-			})
+					return (
+						<MenuItem key={not.createdAt} onClick={handleClose}>
+							<Link
+								to={`/users/${not.recipient}/scream/${not.screamId}`}
+								style={{ display: 'flex' }}
+							>
+								{icon}
+								<Typography variatnt='body1'>
+									{not.sender} {verb} your scream {time}
+								</Typography>
+							</Link>
+						</MenuItem>
+					);
+				})
 		) : (
 			<MenuItem onClick={handleClose}>
 				You have no notificaitons yet
@@ -123,6 +119,10 @@ const Notifications = () => {
 				onEntered={onMenuOpened}
 			>
 				{notificationsMarkup}
+
+				<MenuItem onClick={handleClose}>
+					<div>...more</div>
+				</MenuItem>
 			</Menu>
 		</>
 	);

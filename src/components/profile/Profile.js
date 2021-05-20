@@ -17,6 +17,7 @@ import LinkIcon from '@material-ui/icons/Link';
 import EditIcon from '@material-ui/icons/Edit';
 import CalendarToday from '@material-ui/icons/CalendarToday';
 import KeyboardReturn from '@material-ui/icons/KeyboardReturn';
+import ProfileSkeleton from '../../utils/ProfileSkeleton';
 
 function Profile() {
 	const dispatch = useDispatch();
@@ -38,7 +39,7 @@ function Profile() {
 	const { credentials, loading, authenticated } = useSelector(
 		(state) => state.user
 	);
-	// console.log(credentials);
+
 	const styles = useTheme();
 	let ProfileMarkup = !loading ? (
 		authenticated ? (
@@ -163,7 +164,7 @@ function Profile() {
 			</Paper>
 		)
 	) : (
-		<p>...</p>
+		<ProfileSkeleton />
 	);
 	return ProfileMarkup;
 }

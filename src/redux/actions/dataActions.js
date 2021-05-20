@@ -26,6 +26,7 @@ export const getScreams = () => (dispatch) => {
 };
 
 export const getScream = (screamId) => (dispatch) => {
+	dispatch({ type: SET_SCREAM, payload: {} });
 	axios
 		.get(`/scream/${screamId}`)
 		.then((res) => {

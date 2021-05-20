@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-// import { likeScream, unlikeScream } from '../redux/actions/dataActions';
+import { useSelector } from 'react-redux';
 import DeleteScream from './DeleteScream';
 import ScreamDialog from './ScreamDialog';
 
@@ -69,9 +68,11 @@ const Scream = (props) => {
 				<Typography variant='body1'>{body}</Typography>
 				<LikeButton screamId={screamId} />
 				<span>{likeCount} likes</span>
-				<MyButton tip='comments'>
-					<ChatIcon color='primary' />
-				</MyButton>
+				<Link to={`/users/${userHandle}/scream/${screamId}`}>
+					<MyButton tip='comments'>
+						<ChatIcon color='primary' />
+					</MyButton>
+				</Link>
 				<span>{commentCount} comments</span>
 				<ScreamDialog
 					screamId={screamId}

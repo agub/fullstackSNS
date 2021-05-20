@@ -3,16 +3,14 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import AuthRoute from './utils/AuthRoute';
 import jwtDecode from 'jwt-decode';
 import axios from 'axios';
-
 import { useDispatch } from 'react-redux';
-import { Provider } from 'react-redux';
-import store from './redux/store';
+
 import { SET_AUTHENTICATED } from './redux/types';
 import { logoutUser, getUserData } from './redux/actions/userActions';
 
 import themeFile from './utils/theme';
 import { ThemeProvider } from '@material-ui/core/styles';
-// import CreateMuiTheme from '@material-ui/core/styles/createMuiTheme';
+
 import { unstable_createMuiStrictModeTheme as createMuiTheme } from '@material-ui/core';
 
 import home from './pages/Home';
@@ -21,10 +19,11 @@ import signup from './pages/Signup';
 import Navbar from './components/layout/Navbar';
 import User from './pages/User';
 
-// const theme = CreateMuiTheme(themeFile);
 const theme = createMuiTheme(themeFile);
 
 function App() {
+	axios.defaults.baseURL =
+		'https://asia-northeast1-socials-c6185.cloudfunctions.net/api';
 	const dispatch = useDispatch();
 	const token = localStorage.FBIdToken;
 	if (token) {
@@ -40,7 +39,6 @@ function App() {
 		}
 	}
 	return (
-		// <Provider store={store}>
 		<ThemeProvider theme={theme}>
 			<div className='App'>
 				<Router>
@@ -69,7 +67,6 @@ function App() {
 				</Router>
 			</div>
 		</ThemeProvider>
-		// </Provider>
 	);
 }
 

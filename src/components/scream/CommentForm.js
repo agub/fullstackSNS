@@ -11,12 +11,14 @@ const CommentForm = (props) => {
 	const dispatch = useDispatch();
 	const styles = useTheme();
 	const { authenticated } = useSelector((state) => state.user);
-	const { loading, errors } = useSelector((state) => state.UI);
+	const { errors } = useSelector((state) => state.UI);
+	const { loading } = useSelector((state) => state.data);
 
 	const [state, setState] = useState({
 		body: '',
 		error: {},
 	});
+
 	useEffect(() => {
 		if (errors) {
 			setState((prev) => {
@@ -39,7 +41,7 @@ const CommentForm = (props) => {
 			return { ...prev, [e.target.name]: e.target.value };
 		});
 	};
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
 		dispatch(submitComment(props.screamId, { body: state.body }));
 	};

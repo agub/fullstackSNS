@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Tooltip } from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { postScream, clearErrors } from '../../redux/actions/dataActions';
 import MyButton from '../../utils/MyButton';
@@ -10,8 +8,7 @@ import Dialog from '@material-ui/core/Dialog';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import EditIcon from '@material-ui/icons/Edit';
+
 import AddIcon from '@material-ui/icons/Add';
 import useTheme from '@material-ui/core/styles/useTheme';
 import CloseIcon from '@material-ui/icons/Close';

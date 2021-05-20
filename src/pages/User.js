@@ -5,8 +5,8 @@ import Scream from '../components/scream/Scream';
 import StaticProfile from '../components/profile/StaticProfile';
 import Grid from '@material-ui/core/Grid';
 import { useDispatch, useSelector } from 'react-redux';
-// import ScreamSkeleton from '../util/ScreamSkeleton';
-// import ProfileSkeleton from '../util/ProfileSkeleton';
+import ScreamSkeleton from '../utils/ScreamSkeleton';
+import ProfileSkeleton from '../utils/ProfileSkeleton';
 
 import { getUserData } from '../redux/actions/dataActions';
 
@@ -16,7 +16,6 @@ const User = (props) => {
 	const dispatch = useDispatch();
 	const { screams, loading } = useSelector((state) => state.data);
 	useEffect(() => {
-		console.log(props);
 		const handle = props.match.params.handle;
 		const screamId = props.match.params.screamId;
 
@@ -27,11 +26,9 @@ const User = (props) => {
 					screamIdParam: screamId,
 				};
 			});
-			console.log('fired');
 		}
 
 		dispatch(getUserData(handle));
-		console.log(handle);
 		axios
 			.get(`/user/${handle}`)
 			.then((res) => {
@@ -44,9 +41,8 @@ const User = (props) => {
 			});
 	}, []);
 
-	console.log(state.profile);
 	const screamsMarkup = loading ? (
-		<div> loading </div>
+		<ScreamSkeleton />
 	) : screams === null ? (
 		<div>no screams from this user</div>
 	) : !state.screamIdParam ? (
@@ -71,7 +67,7 @@ const User = (props) => {
 			</Grid>
 			<Grid item sm={4} xs={12}>
 				{state.profile === null ? (
-					<div>...</div>
+					<ProfileSkeleton />
 				) : (
 					<StaticProfile profile={state.profile} />
 				)}

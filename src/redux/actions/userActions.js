@@ -64,7 +64,6 @@ export const uploadImage = (formData) => (dispatch) => {
 	axios
 		.post('/user/image', formData)
 		.then((res) => {
-			console.log(res);
 			dispatch(getUserData());
 		})
 		.catch((err) => console.log(err));
